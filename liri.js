@@ -40,12 +40,13 @@ var omdb = function(){
         // store the response in a variable and then log each parameter. 
         var movie = response.data
         console.log('-------------------------------------------------------');
-        console.log(`Title:\t\t${movie.Title}`);
+        console.log(`Title:\t${movie.Title}`);
+        console.log(`Year:\t${movie.Year}`)
         console.log(`IMDb Rating:\t${movie.Ratings[0].Value}`);
         console.log(`Country:\t${movie.Country}`);
         console.log(`Language:\t${movie.Language}`);
-        console.log(`Plot:\t\t${movie.Plot}`);
-        console.log(`Actors:\t\t${movie.Actors}`);
+        console.log(`Plot:\t${movie.Plot}`);
+        console.log(`Actors:\t${movie.Actors}`);
         console.log('-------------------------------------------------------');
 
     })
@@ -59,7 +60,7 @@ var omdb = function(){
 
 var song = function(){
     // if the user does not input a song, default to The Sign by Ace of Base.
-    if (args.length < 4){
+    if (!userInput){
         userInput = 'The Sign';
     }
     spotify.search({ type: 'track', query: userInput }) 
@@ -85,7 +86,13 @@ var song = function(){
 // doWhatItSays
 
 var says = function(){
-
+    fs.readFile("random.txt", "utf8", function(err, data){
+        if (err) return console.error(err)
+        var thatWay = (data.split(","));
+        console.log(`query: ${thatWay[1]}`);
+        userInput = thatWay[1];
+        song();
+    })
 }
 
 // checks the method input, then runs the appropriate function
@@ -98,5 +105,5 @@ else if (method === "spotify-this-song") {
 }
 
 else if (method === "do-what-it-says") {
-
+    says();
 }
